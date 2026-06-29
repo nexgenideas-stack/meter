@@ -1,0 +1,1154 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Network Cost Calculator — Meter</title>
+  <meta name="description" content="See what Cisco Meraki is actually costing your organization — hardware, licensing, MSP labor, and downtime — vs. Meter's all-in subscription." />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --green-dark:   #085041;
+      --green-mid:    #0F6E56;
+      --green:        #1D9E75;
+      --green-light:  #9FE1CB;
+      --green-pale:   #E1F5EE;
+      --red:          #E24B4A;
+      --amber:        #EF9F27;
+      --gray-900:     #111110;
+      --gray-700:     #3a3a38;
+      --gray-500:     #888780;
+      --gray-300:     #d3d1c7;
+      --gray-100:     #f5f4f0;
+      --gray-50:      #fafaf8;
+      --white:        #ffffff;
+      --radius-sm:    6px;
+      --radius-md:    10px;
+      --radius-lg:    14px;
+    }
+
+    html { font-size: 16px; scroll-behavior: smooth; }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif;
+      background: var(--gray-50);
+      color: var(--gray-900);
+      line-height: 1.6;
+      min-height: 100vh;
+    }
+
+    /* ── NAV ── */
+    nav {
+      background: var(--white);
+      border-bottom: 1px solid var(--gray-300);
+      padding: 0 2rem;
+      height: 56px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+
+    .nav-logo {
+      font-size: 17px;
+      font-weight: 600;
+      color: var(--gray-900);
+      letter-spacing: -0.02em;
+      text-decoration: none;
+    }
+
+    .nav-logo span { color: var(--green); }
+
+    .nav-cta {
+      font-size: 13px;
+      font-weight: 500;
+      color: var(--white);
+      background: var(--green);
+      padding: 7px 16px;
+      border-radius: var(--radius-sm);
+      text-decoration: none;
+      transition: background 0.15s;
+    }
+
+    .nav-cta:hover { background: var(--green-mid); }
+
+    /* ── LAYOUT ── */
+    .page-wrap {
+      max-width: 780px;
+      margin: 0 auto;
+      padding: 3rem 1.5rem 5rem;
+    }
+
+    /* ── HERO ── */
+    .hero {
+      padding-bottom: 2rem;
+      border-bottom: 1px solid var(--gray-300);
+      margin-bottom: 2.5rem;
+    }
+
+    .hero-eyebrow {
+      font-size: 11px;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--gray-500);
+      margin-bottom: 0.75rem;
+    }
+
+    h1 {
+      font-size: clamp(26px, 4vw, 36px);
+      font-weight: 600;
+      color: var(--gray-900);
+      line-height: 1.15;
+      letter-spacing: -0.02em;
+      margin-bottom: 0.75rem;
+    }
+
+    h1 em {
+      font-style: normal;
+      color: var(--green);
+    }
+
+    .hero-sub {
+      font-size: 15px;
+      color: var(--gray-500);
+      max-width: 560px;
+    }
+
+    /* ── INPUTS ── */
+    .input-section { margin-bottom: 2rem; }
+
+    .input-row {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      margin-bottom: 1.25rem;
+    }
+
+    .input-label {
+      font-size: 13px;
+      color: var(--gray-700);
+      min-width: 150px;
+    }
+
+    /* ── DRAG HINT ── */
+    @keyframes thumbNudge {
+      0%   { transform: translateX(0); }
+      25%  { transform: translateX(8px); }
+      55%  { transform: translateX(-5px); }
+      80%  { transform: translateX(3px); }
+      100% { transform: translateX(0); }
+    }
+
+    @keyframes thumbPulse {
+      0%, 100% { box-shadow: 0 0 0 1px var(--green); }
+      50%       { box-shadow: 0 0 0 6px rgba(29,158,117,0.18), 0 0 0 1px var(--green); }
+    }
+
+    .slider-wrap {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      gap: 5px;
+    }
+
+    .drag-hint {
+      font-size: 10px;
+      color: var(--gray-500);
+      letter-spacing: 0.04em;
+      text-align: center;
+      opacity: 1;
+      transition: opacity 0.5s ease;
+      user-select: none;
+      pointer-events: none;
+    }
+
+    .drag-hint.hidden { opacity: 0; }
+
+    input[type="range"] {
+      -webkit-appearance: none;
+      width: 100%;
+      height: 4px;
+      background: var(--gray-300);
+      border-radius: 2px;
+      outline: none;
+      cursor: grab;
+    }
+
+    input[type="range"]:active {
+      cursor: grabbing;
+    }
+
+    input[type="range"].nudge-anim::-webkit-slider-thumb {
+      animation: thumbNudge 0.7s ease 0.6s 1 both, thumbPulse 1.5s ease 0s 2;
+    }
+
+    input[type="range"]::-webkit-slider-thumb {
+      -webkit-appearance: none;
+      width: 22px;
+      height: 22px;
+      border-radius: 50%;
+      background: var(--green);
+      border: 2.5px solid var(--white);
+      box-shadow: 0 0 0 1.5px var(--green), 0 1px 3px rgba(0,0,0,0.15);
+      cursor: grab;
+      transition: box-shadow 0.15s, transform 0.1s;
+    }
+
+    input[type="range"]:active::-webkit-slider-thumb {
+      cursor: grabbing;
+      transform: scale(1.1);
+    }
+
+    input[type="range"]::-webkit-slider-thumb:hover {
+      box-shadow: 0 0 0 5px rgba(29,158,117,0.15), 0 0 0 1.5px var(--green);
+    }
+
+    input[type="range"]::-moz-range-thumb {
+      width: 22px;
+      height: 22px;
+      border-radius: 50%;
+      background: var(--green);
+      border: 2.5px solid var(--white);
+      box-shadow: 0 0 0 1.5px var(--green);
+      cursor: grab;
+    }
+
+    input[type="range"]:active::-moz-range-thumb {
+      cursor: grabbing;
+    }
+
+    .input-val {
+      font-size: 15px;
+      font-weight: 600;
+      color: var(--gray-900);
+      min-width: 70px;
+      text-align: right;
+    }
+
+    /* ── SECTION LABEL ── */
+    .section-label {
+      font-size: 11px;
+      letter-spacing: 0.09em;
+      text-transform: uppercase;
+      color: var(--gray-500);
+      margin-bottom: 1rem;
+    }
+
+    .divider {
+      height: 1px;
+      background: var(--gray-300);
+      margin: 2rem 0;
+    }
+
+    /* ── CARDS ── */
+    .cards {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 10px;
+      margin-bottom: 1.75rem;
+    }
+
+    .card {
+      background: var(--white);
+      border: 1px solid var(--gray-300);
+      border-radius: var(--radius-lg);
+      padding: 1.1rem 1.2rem;
+    }
+
+    .card.featured {
+      border: 2px solid var(--green);
+    }
+
+    .card-eyebrow {
+      font-size: 10px;
+      letter-spacing: 0.07em;
+      text-transform: uppercase;
+      color: var(--gray-500);
+      margin-bottom: 5px;
+    }
+
+    .card-vendor {
+      font-size: 13px;
+      font-weight: 500;
+      color: var(--gray-700);
+      margin-bottom: 12px;
+    }
+
+    .card-amount {
+      font-size: 22px;
+      font-weight: 600;
+      color: var(--gray-900);
+      letter-spacing: -0.02em;
+    }
+
+    .card-amount.red { color: var(--red); }
+    .card-amount.green { color: var(--green-mid); }
+
+    .card-sub {
+      font-size: 11px;
+      color: var(--gray-500);
+      margin-top: 4px;
+    }
+
+    .card-tag {
+      display: inline-block;
+      font-size: 11px;
+      font-weight: 500;
+      padding: 4px 9px;
+      border-radius: 4px;
+      margin-top: 10px;
+      background: var(--green-pale);
+      color: var(--green-dark);
+    }
+
+    /* ── BARS ── */
+    .bar-section { margin-bottom: 2rem; }
+
+    .bar-row { margin-bottom: 14px; }
+
+    .bar-meta {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      margin-bottom: 5px;
+    }
+
+    .bar-name { font-size: 12px; color: var(--gray-500); }
+    .bar-val  { font-size: 12px; font-weight: 600; color: var(--gray-900); }
+
+    .bar-track {
+      height: 6px;
+      background: var(--gray-100);
+      border-radius: 3px;
+      overflow: hidden;
+    }
+
+    .bar-fill {
+      height: 100%;
+      border-radius: 3px;
+      transition: width 0.4s ease;
+    }
+
+    .bar-fill.cisco  { background: var(--red); }
+    .bar-fill.msp    { background: var(--amber); }
+    .bar-fill.meter  { background: var(--green); }
+
+    /* ── SAVINGS BOX ── */
+    .savings-box {
+      background: var(--green-pale);
+      border: 1px solid var(--green-light);
+      border-radius: var(--radius-lg);
+      padding: 1.25rem 1.5rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 1rem;
+      margin-bottom: 1.75rem;
+    }
+
+    .savings-label { font-size: 13px; color: var(--green-mid); }
+
+    .savings-amount {
+      font-size: 30px;
+      font-weight: 700;
+      color: var(--green-dark);
+      letter-spacing: -0.03em;
+    }
+
+    .savings-note { font-size: 11px; color: var(--green-mid); margin-top: 2px; }
+
+    .savings-right { text-align: right; }
+    .savings-right-label { font-size: 12px; color: var(--green-mid); }
+    .savings-right-val {
+      font-size: 20px;
+      font-weight: 600;
+      color: var(--green-dark);
+      margin-top: 3px;
+    }
+
+    /* ── BREAKDOWN TABLE ── */
+    .breakdown {
+      border: 1px solid var(--gray-300);
+      border-radius: var(--radius-md);
+      overflow: hidden;
+      margin-bottom: 2rem;
+    }
+
+    .breakdown-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 10px 16px;
+      font-size: 13px;
+      border-bottom: 1px solid var(--gray-100);
+    }
+
+    .breakdown-row:last-child {
+      border-bottom: none;
+      font-weight: 600;
+      background: var(--gray-100);
+      font-size: 14px;
+    }
+
+    .breakdown-row .bd-label { color: var(--gray-700); }
+    .breakdown-row .bd-val   { color: var(--gray-900); font-weight: 500; }
+    .breakdown-row:last-child .bd-val { color: var(--red); }
+
+    /* ── CTA ROW ── */
+    .cta-row {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      margin-bottom: 2rem;
+    }
+
+    .btn {
+      font-size: 13px;
+      font-weight: 500;
+      padding: 9px 20px;
+      border-radius: var(--radius-sm);
+      cursor: pointer;
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      transition: background 0.15s, border-color 0.15s;
+      border: 1px solid var(--gray-300);
+      background: var(--white);
+      color: var(--gray-900);
+    }
+
+    .btn:hover { background: var(--gray-100); }
+
+    .btn.primary {
+      background: var(--green);
+      color: var(--white);
+      border-color: var(--green);
+    }
+
+    .btn.primary:hover { background: var(--green-mid); border-color: var(--green-mid); }
+
+    /* ── CONTACT STRIP ── */
+    .contact-strip {
+      background: var(--gray-900);
+      color: var(--gray-300);
+      border-radius: var(--radius-lg);
+      padding: 1.75rem 2rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 1rem;
+      margin-bottom: 2rem;
+    }
+
+    .contact-strip h2 {
+      font-size: 18px;
+      font-weight: 600;
+      color: var(--white);
+      margin-bottom: 4px;
+    }
+
+    .contact-strip p { font-size: 13px; color: var(--gray-500); }
+
+    .contact-details { font-size: 13px; }
+    .contact-details a { color: var(--green-light); text-decoration: none; }
+    .contact-details a:hover { text-decoration: underline; }
+    .contact-details .contact-item { margin-bottom: 4px; }
+
+    .btn-call {
+      font-size: 14px;
+      font-weight: 500;
+      padding: 10px 22px;
+      border-radius: var(--radius-sm);
+      background: var(--green);
+      color: var(--white);
+      border: none;
+      cursor: pointer;
+      text-decoration: none;
+      display: inline-block;
+      transition: background 0.15s;
+      white-space: nowrap;
+    }
+
+    .btn-call:hover { background: var(--green-mid); }
+
+    /* ── FOOTER NOTE ── */
+    .footer-note {
+      font-size: 11px;
+      color: var(--gray-500);
+      line-height: 1.7;
+      padding-top: 1.5rem;
+      border-top: 1px solid var(--gray-300);
+    }
+
+    /* ── TOOLTIPS ── */
+    .tip {
+      position: relative;
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      vertical-align: middle;
+    }
+
+    .tip-icon {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 14px;
+      height: 14px;
+      border-radius: 50%;
+      background: var(--gray-300);
+      color: var(--gray-500);
+      font-size: 9px;
+      font-weight: 700;
+      font-style: normal;
+      cursor: pointer;
+      flex-shrink: 0;
+      line-height: 1;
+      transition: background 0.15s, color 0.15s;
+      user-select: none;
+      -webkit-user-select: none;
+    }
+
+    .tip-icon:hover,
+    .tip-icon.active {
+      background: var(--green);
+      color: var(--white);
+    }
+
+    .tip-box {
+      position: absolute;
+      bottom: calc(100% + 9px);
+      left: 50%;
+      transform: translateX(-50%);
+      background: var(--gray-900);
+      color: #e8e6df;
+      font-size: 11.5px;
+      font-weight: 400;
+      font-style: normal;
+      line-height: 1.55;
+      padding: 9px 13px;
+      border-radius: var(--radius-sm);
+      width: 230px;
+      z-index: 500;
+      pointer-events: none;
+      opacity: 0;
+      visibility: hidden;
+      transition: opacity 0.15s, visibility 0.15s;
+      box-shadow: 0 4px 14px rgba(0,0,0,0.22);
+    }
+
+    .tip-box::after {
+      content: '';
+      position: absolute;
+      top: 100%;
+      left: 50%;
+      transform: translateX(-50%);
+      border: 5px solid transparent;
+      border-top-color: var(--gray-900);
+    }
+
+    /* nudge tip-box left/right when near edge */
+    .tip-box.tip-right  { left: 0;   transform: none; }
+    .tip-box.tip-right::after  { left: 10px; transform: none; }
+    .tip-box.tip-left   { left: auto; right: 0; transform: none; }
+    .tip-box.tip-left::after   { left: auto; right: 10px; transform: none; }
+
+    .tip-icon.active + .tip-box,
+    .tip:hover .tip-icon + .tip-box {
+      opacity: 1;
+      visibility: visible;
+    }
+
+    /* Card needs overflow visible for tooltips to escape */
+    .card { overflow: visible; }
+
+    /* ── AZURE SECTION ── */
+    .azure-section {
+      background: #EBF3FB;
+      border: 1px solid #C5D9EE;
+      border-left: 4px solid #0078D4;
+      border-radius: var(--radius-lg);
+      padding: 1.5rem 1.75rem;
+      margin-bottom: 2rem;
+    }
+
+    .azure-header {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 0.75rem;
+    }
+
+    .azure-badge {
+      display: inline-block;
+      background: #0078D4;
+      color: #fff;
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 0.09em;
+      text-transform: uppercase;
+      padding: 3px 9px;
+      border-radius: 4px;
+      flex-shrink: 0;
+    }
+
+    .azure-tagline {
+      font-size: 14px;
+      font-weight: 600;
+      color: #003F7F;
+    }
+
+    .azure-body {
+      font-size: 13px;
+      color: #1a3a5c;
+      line-height: 1.7;
+      margin-bottom: 1.1rem;
+    }
+
+    .azure-body strong { color: #003F7F; }
+
+    .azure-cta {
+      display: inline-block;
+      font-size: 13px;
+      font-weight: 500;
+      color: #0078D4;
+      border: 1.5px solid #0078D4;
+      padding: 7px 15px;
+      border-radius: var(--radius-sm);
+    }
+
+    /* ── MODE TABS ── */
+    .tab-row {
+      display: flex;
+      gap: 6px;
+      margin-bottom: 1.25rem;
+    }
+
+    .tab-btn {
+      font-size: 12px;
+      font-weight: 500;
+      padding: 6px 14px;
+      border-radius: 20px;
+      border: 1.5px solid var(--gray-300);
+      background: var(--white);
+      color: var(--gray-500);
+      cursor: pointer;
+      transition: background 0.15s, border-color 0.15s, color 0.15s;
+      line-height: 1.4;
+    }
+
+    .tab-btn:hover { border-color: var(--green); color: var(--green); }
+
+    .tab-btn.active {
+      background: var(--green);
+      border-color: var(--green);
+      color: var(--white);
+    }
+
+    .sqft-note {
+      font-size: 11px;
+      color: var(--gray-500);
+      margin-top: -0.75rem;
+      margin-bottom: 1rem;
+      padding-left: 166px;
+    }
+
+    @media (max-width: 580px) { .sqft-note { padding-left: 0; } }
+
+    /* ── RESPONSIVE ── */
+    @media (max-width: 580px) {
+      .cards { grid-template-columns: 1fr; }
+      .input-label { min-width: 110px; }
+      .contact-strip { flex-direction: column; }
+      .savings-box { flex-direction: column; }
+      .savings-right { text-align: left; }
+    }
+    /* ── PROSPECT BANNER ── */
+    .prospect-banner {
+      display: none;
+      align-items: center;
+      gap: 14px;
+      background: var(--green-pale);
+      border: 1px solid var(--green-light);
+      border-left: 4px solid var(--green);
+      border-radius: var(--radius-md);
+      padding: 1rem 1.25rem;
+      margin-bottom: 2rem;
+    }
+
+    .prospect-icon { font-size: 22px; flex-shrink: 0; line-height: 1; }
+
+    .prospect-label {
+      font-size: 10px;
+      text-transform: uppercase;
+      letter-spacing: 0.09em;
+      color: var(--green-mid);
+      margin-bottom: 3px;
+    }
+
+    .prospect-company {
+      font-size: 17px;
+      font-weight: 600;
+      color: var(--gray-900);
+      letter-spacing: -0.01em;
+    }
+
+    .prospect-rep {
+      margin-left: auto;
+      font-size: 11px;
+      color: var(--gray-500);
+      text-align: right;
+      flex-shrink: 0;
+      line-height: 1.6;
+    }
+
+    .prospect-dismiss {
+      background: none;
+      border: none;
+      color: var(--gray-500);
+      cursor: pointer;
+      font-size: 16px;
+      padding: 0 0 0 8px;
+      line-height: 1;
+      flex-shrink: 0;
+    }
+
+    .prospect-dismiss:hover { color: var(--gray-900); }
+
+  </style>
+</head>
+<body>
+
+  <nav>
+    <span class="nav-logo">meter<span>.</span></span>
+    <a href="tel:2024417683" class="nav-cta">Call Ron — 202-441-7683</a>
+  </nav>
+
+  <div class="page-wrap">
+
+    <div id="prospect-banner" class="prospect-banner">
+      <span class="prospect-icon">📊</span>
+      <div>
+        <div class="prospect-label">Network cost analysis — prepared for</div>
+        <div class="prospect-company" id="prospect-name">—</div>
+      </div>
+      <div class="prospect-rep">Ron Andrews · Meter Partner<br>202-441-7683</div>
+      <button class="prospect-dismiss" onclick="dismissBanner()" title="Reset to generic view">×</button>
+    </div>
+
+    <div class="hero">
+      <div class="hero-eyebrow">Meter network cost calculator</div>
+      <h1>What is your network <em>actually</em> costing you?</h1>
+      <p class="hero-sub">Adjust your location count to see the full picture: hardware, licensing, MSP labor, and downtime — side by side with Meter's all-in subscription.</p>
+    </div>
+
+    <div class="input-section">
+      <div class="tab-row">
+        <button class="tab-btn active" id="tab-loc" onclick="setMode('locations')">By number of locations</button>
+        <button class="tab-btn"        id="tab-sqft" onclick="setMode('sqft')">By square footage</button>
+      </div>
+
+      <div id="loc-row" class="input-row">
+        <span class="input-label">Number of locations</span>
+        <div class="slider-wrap">
+          <input type="range" id="loc-slider" min="10" max="2000" step="10" value="150" oninput="update()" aria-label="Number of locations">
+          <span class="drag-hint" id="loc-hint">← drag to adjust →</span>
+        </div>
+        <span class="input-val" id="loc-val">150</span>
+      </div>
+
+      <div id="sqft-row" class="input-row" style="display:none;">
+        <span class="input-label">Total square footage</span>
+        <div class="slider-wrap">
+          <input type="range" id="sqft-slider" min="10000" max="5000000" step="10000" value="750000" oninput="update()" aria-label="Total square footage">
+          <span class="drag-hint" id="sqft-hint">← drag to adjust →</span>
+        </div>
+        <span class="input-val" id="sqft-val">750K sq ft</span>
+      </div>
+      <p class="sqft-note" id="sqft-note" style="display:none;">Meter pricing: $1.00/sq ft/yr (est.). Cisco/Meraki side estimated at 1 location per 5,000 sq ft average.</p>
+
+      <div class="input-row">
+        <span class="input-label">Years to model</span>
+        <div class="slider-wrap">
+          <input type="range" id="yr-slider" min="1" max="5" step="1" value="5" oninput="update()" aria-label="Years to model">
+          <span class="drag-hint" id="yr-hint">← drag to adjust →</span>
+        </div>
+        <span class="input-val" id="yr-val">3 years</span>
+      </div>
+    </div>
+
+    <div class="divider"></div>
+
+    <div class="section-label">Annual cost comparison</div>
+
+    <div class="cards">
+      <div class="card">
+        <div class="card-eyebrow">Status quo</div>
+        <div class="card-vendor">Cisco / Meraki +
+          <span class="tip">MSP<i class="tip-icon" tabindex="0">?</i><span class="tip-box">A Managed Service Provider — a third-party IT company that manages your Cisco gear. They markup hardware, charge hourly for support tickets, and you still own every escalation.</span></span>
+        </div>
+        <div class="card-amount red" id="cisco-annual">—</div>
+        <div class="card-sub">per year
+          (<span class="tip">OpEx<i class="tip-icon" tabindex="0">?</i><span class="tip-box tip-right">Operating expense: recurring costs like licensing and MSP labor. Excludes the ~$4,200/site hardware purchase, which hits every 3 years as CapEx.</span></span>
+          only)
+        </div>
+        <div class="card-sub" id="cisco-capex-note" style="margin-top:6px; font-size: 11px; color: #888;">+
+          <span class="tip">CapEx<i class="tip-icon" tabindex="0">?</i><span class="tip-box tip-right">Capital expenditure: an upfront hardware purchase. Cisco/Meraki switches and APs require full replacement roughly every 3 years — ~$4,200/site.</span></span>
+          refresh
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-eyebrow">Middle man</div>
+        <div class="card-vendor">
+          <span class="tip">Traditional MSP<i class="tip-icon" tabindex="0">?</i><span class="tip-box">A managed service provider resells Cisco hardware (with markup), manages your dashboard, and bills per ticket or project. No hardware included, no SLA on resolution time — you still open the ticket.</span></span>
+        </div>
+        <div class="card-amount" id="msp-annual">—</div>
+        <div class="card-sub">per year (est.)</div>
+      </div>
+      <div class="card featured">
+        <div class="card-eyebrow">The upgrade</div>
+        <div class="card-vendor">Meter
+          (<span class="tip">all-in<i class="tip-icon" tabindex="0">?</i><span class="tip-box tip-left">All-in means: switches, APs, firewall, PDUs, cellular backup, installation, 24/7 proactive monitoring, lifecycle upgrades, and ISP support — one flat monthly per-site fee. Nothing extra, ever.</span></span>)
+        </div>
+        <div class="card-amount green" id="meter-annual">—</div>
+        <div class="card-sub">per year, zero CapEx</div>
+        <span class="tip" style="margin-top:10px; display:inline-flex;">
+          <span class="card-tag" id="meter-tag">Save $— /yr</span>
+          <i class="tip-icon" tabindex="0">?</i>
+          <span class="tip-box tip-left">Annual OpEx savings vs. Cisco + MSP. The full picture — including CapEx elimination from never buying hardware again — is in the breakdown below.</span>
+        </span>
+      </div>
+    </div>
+
+    <div class="bar-section">
+      <div class="bar-row">
+        <div class="bar-meta">
+          <span class="bar-name">Cisco / Meraki + MSP (annual OpEx)</span>
+          <span class="bar-val" id="b1v">—</span>
+        </div>
+        <div class="bar-track"><div class="bar-fill cisco" id="b1" style="width:0%"></div></div>
+      </div>
+      <div class="bar-row">
+        <div class="bar-meta">
+          <span class="bar-name">Traditional MSP (annual)</span>
+          <span class="bar-val" id="b2v">—</span>
+        </div>
+        <div class="bar-track"><div class="bar-fill msp" id="b2" style="width:0%"></div></div>
+      </div>
+      <div class="bar-row">
+        <div class="bar-meta">
+          <span class="bar-name">Meter subscription (annual)</span>
+          <span class="bar-val" id="b3v">—</span>
+        </div>
+        <div class="bar-track"><div class="bar-fill meter" id="b3" style="width:0%"></div></div>
+      </div>
+    </div>
+
+    <div class="divider"></div>
+
+    <div class="section-label" id="yr-label-total">3-year total cost of ownership</div>
+
+    <div class="savings-box">
+      <div>
+        <div class="savings-label">Estimated savings vs. Cisco / Meraki over <span id="yr-inline">3</span> years</div>
+        <div class="savings-amount" id="savings-total">—</div>
+        <div class="savings-note">
+          <span class="tip">CapEx<i class="tip-icon" tabindex="0">?</i><span class="tip-box">CapEx: zero hardware purchases ever — Cisco requires ~$4,200/site every 3 years. With Meter, hardware is included in the subscription.</span></span>
+          elimination +
+          <span class="tip">OpEx<i class="tip-icon" tabindex="0">?</i><span class="tip-box">OpEx: Meter's flat per-site subscription replaces Meraki licensing fees (~$1,140/site/yr) and MSP labor costs.</span></span>
+          reduction
+        </div>
+      </div>
+      <div class="savings-right">
+        <div class="savings-right-label">Meter <span id="yr-inline2">3</span>-yr total</div>
+        <div class="savings-right-val" id="meter-total">—</div>
+      </div>
+    </div>
+
+    <div class="breakdown">
+      <div class="breakdown-row">
+        <span class="bd-label">
+          <span class="tip">Cisco hardware CapEx<i class="tip-icon" tabindex="0">?</i><span class="tip-box">Upfront cost to purchase Cisco/Meraki switches, APs, and routers — required roughly every 3 years. Industry benchmark: ~$4,200/site. With Meter, this line is $0.</span></span>
+          (over <span id="capex-yr">3</span> yrs)
+        </span>
+        <span class="bd-val" id="bd-capex">—</span>
+      </div>
+      <div class="breakdown-row">
+        <span class="bd-label">
+          <span class="tip">Meraki licensing<i class="tip-icon" tabindex="0">?</i><span class="tip-box">Cisco charges ~$1,140/site/yr to maintain software access, security updates, and Meraki dashboard visibility. This fee typically increases 15–25% at renewal — and it's non-optional.</span></span>
+          (annual × <span id="lic-yr">3</span> yrs)
+        </span>
+        <span class="bd-val" id="bd-lic">—</span>
+      </div>
+      <div class="breakdown-row">
+        <span class="bd-label">
+          <span class="tip">MSP / IT labor (network tickets)<i class="tip-icon" tabindex="0">?</i><span class="tip-box">IT/MSP time resolving network issues — estimated at ~23 tickets/month per 50 locations. Benchmark: $620K/yr for a 50-location group, scaled to your count. Meter owns all tickets 24/7.</span></span>
+        </span>
+        <span class="bd-val" id="bd-msp">—</span>
+      </div>
+      <div class="breakdown-row">
+        <span class="bd-label">
+          <span class="tip">Network downtime cost (est.)<i class="tip-icon" tabindex="0">?</i><span class="tip-box">Based on 0.8 outages/location/yr × 35 min avg resolution × $240/hr per location in lost productivity. Conservative industry estimate — clinical and operational downtime is often higher.</span></span>
+        </span>
+        <span class="bd-val" id="bd-down">—</span>
+      </div>
+      <div class="breakdown-row">
+        <span class="bd-label">Cisco / Meraki total (<span id="t-yr">3</span> yrs)</span>
+        <span class="bd-val" id="bd-cisco-total">—</span>
+      </div>
+    </div>
+
+    <div class="azure-section">
+      <div class="azure-header">
+        <span class="azure-badge">Azure Marketplace</span>
+        <span class="azure-tagline">Azure customer? Buy Meter through your Microsoft subscription.</span>
+      </div>
+      <p class="azure-body">
+        Meter is available on the Azure Marketplace and fully transactable through Microsoft — clearing procurement in minutes.
+        If your organization has a <span class="tip"><strong>Microsoft Azure Consumption Commitment (MACC)</strong><i class="tip-icon" tabindex="0">?</i><span class="tip-box">A pre-paid contract with Microsoft to spend a set amount on Azure services. Meter qualifies — so budget you've already committed to Microsoft can pay for your Meter subscription. No new vendor approval, no new CapEx line.</span></span>,
+        Meter spend counts toward it, meaning you may be able to purchase using budget you've already committed to Microsoft.
+        No new vendor approvals, no new CapEx line.
+      </p>
+
+    </div>
+
+    <div class="contact-strip">
+      <div>
+        <h2>Run the numbers for your org.</h2>
+        <p>Call me and I'll walk through it for your specific situation.</p>
+        <div class="contact-details" style="margin-top: 12px;">
+          <div class="contact-item">Ron Andrews &middot; Meter Partner</div>
+          <div class="contact-item"><a href="tel:2024417683">202-441-7683</a></div>
+        </div>
+      </div>
+      <a href="tel:2024417683" class="btn-call">Call now &rarr;</a>
+    </div>
+
+    <div class="footer-note">
+      <strong>Methodology:</strong> Cisco/Meraki hardware: $4,200/site on 3-yr refresh cycle. Meraki licensing: $1,140/site/yr. MSP/IT labor: estimated at $620K base for 50 locations, scaled proportionally. Network downtime: 0.8 outages/location/yr × 35 min avg resolution × $240/hr per location. Meter subscription: $480/site/mo all-in. Traditional MSP estimated at ~30% premium over Cisco OpEx. All figures are conservative industry benchmarks for illustrative purposes. Actual costs vary by contract, region, and configuration.
+      <br><br>
+      &copy; <span id="yr-copy"></span> Ron Andrews &middot; Meter Partner
+    </div>
+
+  </div>
+
+  <script>
+    document.getElementById('yr-copy').textContent = new Date().getFullYear();
+
+    var currentMode = 'locations';
+
+    function fmtSqft(n) {
+      if (n >= 1000000) return (n / 1000000).toFixed(2).replace(/\.?0+$/, '') + 'M sq ft';
+      if (n >= 1000)    return Math.round(n / 1000) + 'K sq ft';
+      return n.toLocaleString() + ' sq ft';
+    }
+
+    function fmt(n) {
+      if (n >= 1000000) return '$' + (n / 1000000).toFixed(1) + 'M';
+      if (n >= 1000)    return '$' + Math.round(n / 1000) + 'K';
+      return '$' + Math.round(n);
+    }
+
+    function setMode(mode) {
+      currentMode = mode;
+      document.getElementById('tab-loc').classList.toggle('active',  mode === 'locations');
+      document.getElementById('tab-sqft').classList.toggle('active', mode === 'sqft');
+      document.getElementById('loc-row').style.display   = mode === 'locations' ? '' : 'none';
+      document.getElementById('sqft-row').style.display  = mode === 'sqft'      ? '' : 'none';
+      document.getElementById('sqft-note').style.display = mode === 'sqft'      ? 'block' : 'none';
+      update();
+    }
+
+    function update() {
+      const yrs = parseInt(document.getElementById('yr-slider').value);
+
+      let locs, meterAnnual;
+
+      if (currentMode === 'sqft') {
+        const sqft = parseInt(document.getElementById('sqft-slider').value);
+        document.getElementById('sqft-val').textContent = fmtSqft(sqft);
+        locs       = Math.max(1, Math.round(sqft / 5000));
+        meterAnnual = sqft * 1.00; // $1.00/sq ft/yr
+      } else {
+        locs       = parseInt(document.getElementById('loc-slider').value);
+        document.getElementById('loc-val').textContent = locs.toLocaleString();
+        meterAnnual = 480 * 12 * locs;
+      }
+
+      document.getElementById('yr-val').textContent = yrs + (yrs === 1 ? ' year' : ' years');
+      ['yr-inline','yr-inline2'].forEach(id => document.getElementById(id).textContent = yrs);
+      ['capex-yr','lic-yr','t-yr'].forEach(id => document.getElementById(id).textContent = yrs);
+      document.getElementById('yr-label-total').textContent = yrs + '-year total cost of ownership';
+
+      const MERAKI_HW     = 4200;
+      const MERAKI_LIC_YR = 1140;
+      const DOWNTIME_RATE = 240;
+      const OUTAGES_PER   = 0.8;
+      const OUTAGE_MINS   = 35;
+      const MSP_BASE      = 620000;
+      const MSP_BASE_LOCS = 50;
+
+      const merakiCapex    = MERAKI_HW * locs * (yrs / 3);
+      const merakiLicTotal = MERAKI_LIC_YR * locs * yrs;
+      const mspLabor       = Math.round((MSP_BASE / MSP_BASE_LOCS) * locs * yrs);
+      const downtimeCost   = Math.round(OUTAGES_PER * locs * (OUTAGE_MINS / 60) * DOWNTIME_RATE * yrs);
+
+      const ciscoAnnualOpex = (merakiLicTotal + mspLabor + downtimeCost) / yrs;
+      const ciscoGrandTotal = merakiCapex + merakiLicTotal + mspLabor + downtimeCost;
+      const meterTotal      = meterAnnual * yrs;
+      const mspAnnual       = ciscoAnnualOpex * 1.3;
+      const savings         = ciscoGrandTotal - meterTotal;
+      const savingsAnnual   = ciscoAnnualOpex - meterAnnual;
+
+      document.getElementById('cisco-annual').textContent     = fmt(ciscoAnnualOpex);
+      document.getElementById('cisco-capex-note').textContent = '+ ' + fmt(MERAKI_HW * locs) + ' CapEx every 3 yrs';
+      document.getElementById('msp-annual').textContent       = fmt(mspAnnual);
+      document.getElementById('meter-annual').textContent     = fmt(meterAnnual);
+      document.getElementById('meter-tag').textContent        = 'Save ' + fmt(savingsAnnual) + '/yr';
+
+      const maxBar = Math.max(ciscoAnnualOpex, mspAnnual, meterAnnual);
+      document.getElementById('b1').style.width = Math.round((ciscoAnnualOpex / maxBar) * 100) + '%';
+      document.getElementById('b2').style.width = Math.round((mspAnnual       / maxBar) * 100) + '%';
+      document.getElementById('b3').style.width = Math.round((meterAnnual     / maxBar) * 100) + '%';
+      document.getElementById('b1v').textContent = fmt(ciscoAnnualOpex) + '/yr';
+      document.getElementById('b2v').textContent = fmt(mspAnnual)       + '/yr';
+      document.getElementById('b3v').textContent = fmt(meterAnnual)     + '/yr';
+
+      document.getElementById('savings-total').textContent  = fmt(savings);
+      document.getElementById('meter-total').textContent    = fmt(meterTotal);
+      document.getElementById('bd-capex').textContent       = fmt(merakiCapex);
+      document.getElementById('bd-lic').textContent         = fmt(merakiLicTotal);
+      document.getElementById('bd-msp').textContent         = fmt(mspLabor);
+      document.getElementById('bd-down').textContent        = fmt(downtimeCost);
+      document.getElementById('bd-cisco-total').textContent = fmt(ciscoGrandTotal);
+    }
+
+    update();
+
+    // ── URL PARAM PRE-POPULATION ──
+    (function() {
+      var p       = new URLSearchParams(window.location.search);
+      var company = p.get('company');
+      var locs    = p.get('locs');
+      var sqft    = p.get('sqft');
+      var yrs     = p.get('yrs');
+      var mode    = p.get('mode');
+
+      if (mode === 'sqft' || sqft) {
+        setMode('sqft');
+        if (sqft) {
+          document.getElementById('sqft-slider').value =
+            Math.min(5000000, Math.max(10000, parseInt(sqft) || 750000));
+        }
+      } else if (locs) {
+        document.getElementById('loc-slider').value =
+          Math.min(2000, Math.max(10, parseInt(locs) || 150));
+      }
+
+      if (yrs) {
+        document.getElementById('yr-slider').value =
+          Math.min(5, Math.max(1, parseInt(yrs) || 5));
+      }
+
+      if (company) {
+        var name = decodeURIComponent(company.replace(/\+/g, ' '));
+        document.getElementById('prospect-banner').style.display = 'flex';
+        document.getElementById('prospect-name').textContent = name;
+        document.title = 'Network Cost Analysis \u2014 ' + name;
+        var h1 = document.querySelector('h1');
+        if (h1) {
+          h1.textContent = '';
+          h1.appendChild(document.createTextNode('What is '));
+          var em = document.createElement('em');
+          em.textContent = name;
+          h1.appendChild(em);
+          h1.appendChild(document.createTextNode(' paying for the network?'));
+        }
+      }
+
+      update();
+    })();
+
+    function dismissBanner() {
+      document.getElementById('prospect-banner').style.display = 'none';
+      var h1 = document.querySelector('h1');
+      if (h1) {
+        h1.textContent = '';
+        h1.appendChild(document.createTextNode('What is your network '));
+        var em = document.createElement('em');
+        em.textContent = 'actually';
+        h1.appendChild(em);
+        h1.appendChild(document.createTextNode(' costing you?'));
+      }
+      document.title = 'Network Cost Calculator \u2014 Meter';
+    }
+
+    // ── SLIDER AFFORDANCE ──
+    const sliders = document.querySelectorAll('input[type="range"]');
+    sliders.forEach(function(slider) {
+      slider.classList.add('nudge-anim');
+      slider.addEventListener('animationend', function() {
+        slider.classList.remove('nudge-anim');
+      }, { once: true });
+    });
+
+    // Fade out drag hints on first interaction
+    var hintMap = {
+      'loc-slider':  'loc-hint',
+      'sqft-slider': 'sqft-hint',
+      'yr-slider':   'yr-hint'
+    };
+
+    Object.keys(hintMap).forEach(function(sliderId) {
+      var slider = document.getElementById(sliderId);
+      var hint   = document.getElementById(hintMap[sliderId]);
+      var dismissed = false;
+      function dismissHint() {
+        if (!dismissed) { dismissed = true; hint.classList.add('hidden'); }
+      }
+      slider.addEventListener('input',      dismissHint);
+      slider.addEventListener('mousedown',  dismissHint);
+      slider.addEventListener('touchstart', dismissHint, { passive: true });
+    });
+
+    // ── TOOLTIPS ──
+    document.addEventListener('click', function(e) {
+      var icon     = e.target.closest('.tip-icon');
+      var allIcons = document.querySelectorAll('.tip-icon');
+      if (icon) {
+        e.stopPropagation();
+        var isActive = icon.classList.contains('active');
+        allIcons.forEach(function(i) { i.classList.remove('active'); });
+        if (!isActive) {
+          icon.classList.add('active');
+          var box = icon.nextElementSibling;
+          if (box && box.classList.contains('tip-box')) {
+            box.classList.remove('tip-right', 'tip-left');
+            var rect = box.getBoundingClientRect();
+            if (rect.right > window.innerWidth - 8) box.classList.add('tip-left');
+            else if (rect.left < 8) box.classList.add('tip-right');
+          }
+        }
+      } else {
+        allIcons.forEach(function(i) { i.classList.remove('active'); });
+      }
+    });
+
+    document.addEventListener('keydown', function(e) {
+      if ((e.key === 'Enter' || e.key === ' ') && e.target.classList.contains('tip-icon')) {
+        e.preventDefault();
+        e.target.click();
+      }
+      if (e.key === 'Escape') {
+        document.querySelectorAll('.tip-icon').forEach(function(i) { i.classList.remove('active'); });
+      }
+    });
+  </script>
+</body>
+</html>
