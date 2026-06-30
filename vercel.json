@@ -1,5 +1,8 @@
 {
-  "rewrites": [
-    { "source": "/generate", "destination": "/generate/index.html" }
+  "routes": [
+    { "src": "/api/(.*)", "dest": "/api/$1" },
+    { "src": "/drafter", "dest": "/drafter.html" },
+    { "src": "/drafter.bundle.js", "dest": "/drafter.bundle.js" },
+    { "src": "/(.*)", "dest": "/$1" }
   ]
 }
