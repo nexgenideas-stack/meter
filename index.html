@@ -721,9 +721,225 @@
 
     .prospect-dismiss:hover { color: var(--gray-900); }
 
+    /* ── ACTION ROW (Email + PDF) ── */
+    .action-row {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      margin-bottom: 2rem;
+      align-items: center;
+    }
+
+    .btn {
+      font-size: 13px;
+      font-weight: 500;
+      padding: 9px 18px;
+      border-radius: var(--radius-sm);
+      cursor: pointer;
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      transition: background 0.15s, border-color 0.15s;
+      border: 1px solid var(--gray-300);
+      background: var(--white);
+      color: var(--gray-700);
+    }
+
+    .btn:hover { background: var(--gray-100); }
+
+    .btn.primary {
+      background: var(--green);
+      color: var(--white);
+      border-color: var(--green);
+    }
+
+    .btn.primary:hover { background: var(--green-mid); border-color: var(--green-mid); }
+
+    .btn svg { width: 14px; height: 14px; flex-shrink: 0; }
+
+    /* ── LEAD CAPTURE MODAL ── */
+    .modal-overlay {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.45);
+      z-index: 200;
+      align-items: center;
+      justify-content: center;
+      padding: 1.5rem;
+    }
+
+    .modal-overlay.open { display: flex; }
+
+    .modal {
+      background: var(--white);
+      border-radius: var(--radius-lg);
+      padding: 2rem;
+      width: 100%;
+      max-width: 460px;
+      box-shadow: 0 20px 60px rgba(0,0,0,0.2);
+      position: relative;
+    }
+
+    .modal-close {
+      position: absolute;
+      top: 1rem;
+      right: 1rem;
+      background: none;
+      border: none;
+      cursor: pointer;
+      color: var(--gray-500);
+      font-size: 20px;
+      line-height: 1;
+      padding: 4px;
+    }
+
+    .modal-close:hover { color: var(--gray-700); }
+
+    .modal-eyebrow {
+      font-size: 11px;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--green);
+      font-weight: 600;
+      margin-bottom: 0.5rem;
+    }
+
+    .modal h2 { font-size: 20px; font-weight: 600; color: var(--gray-900); margin-bottom: 0.5rem; line-height: 1.2; }
+    .modal-sub { font-size: 13px; color: var(--gray-500); margin-bottom: 1.5rem; }
+
+    .modal-summary {
+      background: var(--gray-50);
+      border: 1px solid var(--gray-300);
+      border-radius: var(--radius-md);
+      padding: 0.875rem 1rem;
+      margin-bottom: 1.5rem;
+      font-size: 13px;
+      color: var(--gray-700);
+    }
+
+    .modal-summary strong { color: var(--gray-900); }
+    .modal-summary .summary-savings { font-size: 18px; font-weight: 700; color: var(--green-dark); display: block; margin-top: 4px; }
+
+    .field { margin-bottom: 1rem; }
+    .field label { display: block; font-size: 12px; font-weight: 600; color: var(--gray-700); margin-bottom: 5px; letter-spacing: 0.02em; }
+    .field input {
+      width: 100%;
+      padding: 9px 12px;
+      font-size: 14px;
+      border: 1px solid var(--gray-300);
+      border-radius: var(--radius-sm);
+      color: var(--gray-900);
+      background: var(--white);
+      outline: none;
+      transition: border-color 0.15s;
+      font-family: inherit;
+    }
+
+    .field input:focus { border-color: var(--green); box-shadow: 0 0 0 3px var(--green-pale); }
+    .field input.error { border-color: var(--red); }
+    .field-row { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+
+    .modal-submit {
+      width: 100%;
+      padding: 11px;
+      background: var(--green);
+      color: var(--white);
+      border: none;
+      border-radius: var(--radius-sm);
+      font-size: 14px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background 0.15s;
+      margin-top: 0.5rem;
+      font-family: inherit;
+    }
+
+    .modal-submit:hover { background: var(--green-mid); }
+    .modal-disclaimer { font-size: 11px; color: var(--gray-500); text-align: center; margin-top: 0.75rem; }
+    .modal-success { display: none; text-align: center; padding: 1rem 0; }
+    .modal-success.show { display: block; }
+    .modal-form.hide { display: none; }
+    .success-icon { font-size: 40px; margin-bottom: 1rem; }
+    .modal-success h3 { font-size: 18px; font-weight: 600; color: var(--gray-900); margin-bottom: 0.5rem; }
+    .modal-success p { font-size: 13px; color: var(--gray-500); }
+
+    /* ── PRINT STYLES ── */
+    @media print {
+      nav, .action-row, .contact-strip, .modal-overlay, .prospect-banner { display: none !important; }
+      body { background: white; color: #111; font-size: 12px; }
+      .page-wrap { padding: 0; max-width: 100%; }
+      .hero { border-bottom: 1px solid #ccc; padding-bottom: 1rem; margin-bottom: 1.5rem; }
+      h1 { font-size: 22px; }
+      .cards { grid-template-columns: repeat(3, 1fr); gap: 8px; }
+      .card { border: 1px solid #ccc; padding: 0.75rem; break-inside: avoid; }
+      .savings-box { background: #f0faf6; border: 1px solid #9FE1CB; }
+      .breakdown { break-inside: avoid; }
+      .footer-note { border-top: 1px solid #ccc; margin-top: 1.5rem; font-size: 10px; }
+      .print-header { display: block !important; }
+      .divider { border-top: 1px solid #ddd; margin: 1rem 0; height: 0; }
+      .bar-track { background: #eee; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+      .bar-fill { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+      .savings-amount { color: #085041 !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+      .tip-icon { display: none !important; }
+    }
+
+    .print-header {
+      display: none;
+      font-size: 11px;
+      color: var(--gray-500);
+      margin-bottom: 1rem;
+    }
+
   </style>
 </head>
 <body>
+
+  <!-- Lead Capture Modal -->
+  <div class="modal-overlay" id="modal-overlay" onclick="closeModalOutside(event)">
+    <div class="modal">
+      <button class="modal-close" onclick="closeModal()" aria-label="Close">&times;</button>
+
+      <div class="modal-form" id="modal-form">
+        <div class="modal-eyebrow">Your custom analysis</div>
+        <h2>Email me this report</h2>
+        <p class="modal-sub">We'll send a PDF summary of your cost analysis to review with your team — or your CFO.</p>
+
+        <div class="modal-summary" id="modal-summary">
+          <!-- filled by JS -->
+        </div>
+
+        <div class="field-row">
+          <div class="field">
+            <label for="f-name">First name</label>
+            <input type="text" id="f-name" placeholder="Sarah" autocomplete="given-name" />
+          </div>
+          <div class="field">
+            <label for="f-last">Last name</label>
+            <input type="text" id="f-last" placeholder="Chen" autocomplete="family-name" />
+          </div>
+        </div>
+        <div class="field">
+          <label for="f-company">Company / DSO name</label>
+          <input type="text" id="f-company" placeholder="Heartland Dental" autocomplete="organization" />
+        </div>
+        <div class="field">
+          <label for="f-email">Work email</label>
+          <input type="email" id="f-email" placeholder="sarah@company.com" autocomplete="email" />
+        </div>
+
+        <button class="modal-submit" onclick="submitLead()">Send my analysis &rarr;</button>
+        <p class="modal-disclaimer">Ron Andrews will follow up personally. No spam, ever.</p>
+      </div>
+
+      <div class="modal-success" id="modal-success">
+        <div class="success-icon">✅</div>
+        <h3>You're all set</h3>
+        <p>Ron Andrews will be in touch shortly at <strong id="confirm-email"></strong>.<br><br>In the meantime, call him directly at <a href="tel:2024417683" style="color: var(--green);">202-441-7683</a>.</p>
+      </div>
+    </div>
+  </div>
 
   <nav>
     <span class="nav-logo">meter<span>.</span></span>
@@ -731,6 +947,10 @@
   </nav>
 
   <div class="page-wrap">
+
+    <div class="print-header" id="print-header">
+      Network Cost Analysis &nbsp;·&nbsp; Prepared by Ron Andrews, Meter Partner &nbsp;·&nbsp; 202-441-7683
+    </div>
 
     <div id="prospect-banner" class="prospect-banner">
       <span class="prospect-icon">📊</span>
@@ -745,7 +965,7 @@
     <div class="hero">
       <div class="hero-eyebrow">Meter network cost calculator</div>
       <h1>What is your network <em>actually</em> costing you?</h1>
-      <p class="hero-sub">Adjust your location count to see the full picture: hardware, licensing, MSP labor, and downtime — side by side with Meter's all-in subscription.</p>
+      <p class="hero-sub"><strong>Switches, wireless, and firewall across all your locations — the LAN layer, not your ISP bill.</strong> Adjust your location count to see the full picture: hardware, licensing, MSP labor, and downtime — side by side with Meter's all-in subscription.</p>
     </div>
 
     <div class="input-section">
@@ -790,7 +1010,7 @@
     <div class="cards">
       <div class="card">
         <div class="card-eyebrow">Status quo</div>
-        <div class="card-vendor">Cisco / Meraki +
+        <div class="card-vendor">Cisco / Meraki LAN +
           <span class="tip">MSP<i class="tip-icon" tabindex="0">?</i><span class="tip-box">A Managed Service Provider — a third-party IT company that manages your Cisco gear. They markup hardware, charge hourly for support tickets, and you still own every escalation.</span></span>
         </div>
         <div class="card-amount red" id="cisco-annual">—</div>
@@ -829,7 +1049,7 @@
     <div class="bar-section">
       <div class="bar-row">
         <div class="bar-meta">
-          <span class="bar-name">Cisco / Meraki + MSP (annual OpEx)</span>
+          <span class="bar-name">Cisco / Meraki LAN + MSP (annual OpEx)</span>
           <span class="bar-val" id="b1v">—</span>
         </div>
         <div class="bar-track"><div class="bar-fill cisco" id="b1" style="width:0%"></div></div>
@@ -856,7 +1076,7 @@
 
     <div class="savings-box">
       <div>
-        <div class="savings-label">Estimated savings vs. Cisco / Meraki over <span id="yr-inline">3</span> years</div>
+        <div class="savings-label">Estimated LAN infrastructure savings vs. Cisco / Meraki over <span id="yr-inline">3</span> years</div>
         <div class="savings-amount" id="savings-total">—</div>
         <div class="savings-note">
           <span class="tip">CapEx<i class="tip-icon" tabindex="0">?</i><span class="tip-box">CapEx: zero hardware purchases ever — Cisco requires ~$4,200/site every 3 years. With Meter, hardware is included in the subscription.</span></span>
@@ -918,6 +1138,17 @@
 
     </div>
 
+    <div class="action-row">
+      <button class="btn primary" onclick="openModal()">
+        <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="1" y="3" width="14" height="10" rx="1.5"/><path d="M1 4l7 5 7-5"/></svg>
+        Email me this analysis
+      </button>
+      <button class="btn" onclick="printReport()">
+        <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M4 5V2h8v3"/><rect x="1" y="5" width="14" height="7" rx="1"/><path d="M4 9h8M4 12h4"/><rect x="4" y="9" width="8" height="5" rx="0.5"/></svg>
+        Save as PDF
+      </button>
+    </div>
+
     <div class="contact-strip">
       <div>
         <h2>Run the numbers for your org.</h2>
@@ -931,7 +1162,7 @@
     </div>
 
     <div class="footer-note">
-      <strong>Methodology:</strong> Cisco/Meraki hardware: $4,200/site on 3-yr refresh cycle. Meraki licensing: $1,140/site/yr. MSP/IT labor: estimated at $620K base for 50 locations, scaled proportionally. Network downtime: 0.8 outages/location/yr × 35 min avg resolution × $240/hr per location. Meter subscription: $480/site/mo all-in. Traditional MSP estimated at ~30% premium over Cisco OpEx. All figures are conservative industry benchmarks for illustrative purposes. Actual costs vary by contract, region, and configuration.
+      <strong>Methodology:</strong> Cisco/Meraki hardware: $4,200/site on 3-yr refresh cycle. Meraki licensing: $1,140/site/yr. MSP/IT labor: estimated at $620K base for 50 locations, scaled proportionally. Network downtime: 0.8 outages/location/yr × 35 min avg resolution × $240/hr per location. Meter subscription: $480/site/mo all-in. Traditional MSP estimated at ~30% premium over Cisco OpEx. All figures are conservative industry benchmarks for illustrative purposes. Actual costs vary by contract, region, and configuration. <strong>Costs reflect on-premise LAN infrastructure only</strong> (switches, wireless APs, firewall, and managed support). WAN/ISP costs are excluded from this comparison. Note: Meter also simplifies ISP coordination and management — included in the subscription at no extra cost.
       <br><br>
       &copy; <span id="yr-copy"></span> Ron Andrews &middot; Meter Partner
     </div>
@@ -1027,6 +1258,101 @@
       document.getElementById('bd-msp').textContent         = fmt(mspLabor);
       document.getElementById('bd-down').textContent        = fmt(downtimeCost);
       document.getElementById('bd-cisco-total').textContent = fmt(ciscoGrandTotal);
+    }
+
+    // ── MODAL (Email Me This Analysis) ──
+    function openModal() {
+      var summary = document.getElementById('modal-summary');
+      var modeLabel = currentMode === 'locations'
+        ? document.getElementById('loc-val').textContent + ' locations'
+        : document.getElementById('sqft-val').textContent;
+      var yrs = document.getElementById('yr-val').textContent;
+
+      summary.innerHTML = '';
+      var line1 = document.createElement('strong');
+      line1.textContent = modeLabel + '  ·  ' + yrs;
+      var line2 = document.createElement('span');
+      line2.className = 'summary-savings';
+      line2.textContent = document.getElementById('savings-total').textContent + ' estimated savings vs. Cisco';
+      var line3 = document.createTextNode('Meter ' + yrs + ' total: ');
+      var line3b = document.createElement('strong');
+      line3b.textContent = document.getElementById('meter-total').textContent;
+
+      summary.appendChild(line1);
+      summary.appendChild(line2);
+      summary.appendChild(line3);
+      summary.appendChild(line3b);
+
+      document.getElementById('modal-form').classList.remove('hide');
+      document.getElementById('modal-success').classList.remove('show');
+      document.getElementById('modal-overlay').classList.add('open');
+      document.getElementById('f-name').focus();
+    }
+
+    function closeModal() {
+      document.getElementById('modal-overlay').classList.remove('open');
+    }
+
+    function closeModalOutside(e) {
+      if (e.target === document.getElementById('modal-overlay')) closeModal();
+    }
+
+    function submitLead() {
+      var name    = document.getElementById('f-name').value.trim();
+      var last    = document.getElementById('f-last').value.trim();
+      var company = document.getElementById('f-company').value.trim();
+      var email   = document.getElementById('f-email').value.trim();
+
+      var valid = true;
+      [['f-name', name], ['f-last', last], ['f-company', company], ['f-email', email]].forEach(function(pair) {
+        var el = document.getElementById(pair[0]);
+        if (!pair[1]) { el.classList.add('error'); valid = false; }
+        else el.classList.remove('error');
+      });
+      if (!email.includes('@')) {
+        document.getElementById('f-email').classList.add('error');
+        valid = false;
+      }
+      if (!valid) return;
+
+      var payload = {
+        name: name + ' ' + last,
+        company: company,
+        email: email,
+        mode: currentMode,
+        locations: currentMode === 'locations' ? document.getElementById('loc-val').textContent : null,
+        sqft: currentMode === 'sqft' ? document.getElementById('sqft-val').textContent : null,
+        years: document.getElementById('yr-val').textContent,
+        cisco_total: document.getElementById('bd-cisco-total').textContent,
+        meter_total: document.getElementById('meter-total').textContent,
+        savings: document.getElementById('savings-total').textContent,
+        submitted_at: new Date().toISOString()
+      };
+
+      // ── LEAD CAPTURE ENDPOINT ──
+      // Paste your Apps Script web app URL here once deployed (see DEPLOYMENT_GUIDE.md)
+      var LEAD_CAPTURE_URL = '';
+
+      if (LEAD_CAPTURE_URL) {
+        fetch(LEAD_CAPTURE_URL, {
+          method: 'POST',
+          headers: { 'Content-Type': 'text/plain' },
+          body: JSON.stringify(payload)
+        }).catch(function(err) { console.warn('Submission error:', err); });
+      } else {
+        console.warn('LEAD_CAPTURE_URL not configured — lead not saved:', payload);
+      }
+
+      document.getElementById('confirm-email').textContent = email;
+      document.getElementById('modal-form').classList.add('hide');
+      document.getElementById('modal-success').classList.add('show');
+    }
+
+    // ── PRINT / PDF ──
+    function printReport() {
+      document.getElementById('print-header').style.display = 'block';
+      window.print();
+      document.getElementById('print-header').style.display = 'none';
     }
 
     update();
