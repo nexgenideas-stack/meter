@@ -38,7 +38,6 @@
       min-height: 100vh;
     }
 
-    /* ── NAV ── */
     nav {
       background: var(--white);
       border-bottom: 1px solid var(--gray-300);
@@ -75,14 +74,12 @@
 
     .nav-cta:hover { background: var(--green-mid); }
 
-    /* ── LAYOUT ── */
     .page-wrap {
       max-width: 780px;
       margin: 0 auto;
       padding: 3rem 1.5rem 5rem;
     }
 
-    /* ── HERO ── */
     .hero {
       padding-bottom: 2rem;
       border-bottom: 1px solid var(--gray-300);
@@ -117,7 +114,6 @@
       max-width: 560px;
     }
 
-    /* ── INPUTS ── */
     .input-section { margin-bottom: 2rem; }
 
     .input-row {
@@ -133,7 +129,6 @@
       min-width: 150px;
     }
 
-    /* ── DRAG HINT ── */
     @keyframes thumbNudge {
       0%   { transform: translateX(0); }
       25%  { transform: translateX(8px); }
@@ -177,9 +172,7 @@
       cursor: grab;
     }
 
-    input[type="range"]:active {
-      cursor: grabbing;
-    }
+    input[type="range"]:active { cursor: grabbing; }
 
     input[type="range"].nudge-anim::-webkit-slider-thumb {
       animation: thumbNudge 0.7s ease 0.6s 1 both, thumbPulse 1.5s ease 0s 2;
@@ -216,9 +209,7 @@
       cursor: grab;
     }
 
-    input[type="range"]:active::-moz-range-thumb {
-      cursor: grabbing;
-    }
+    input[type="range"]:active::-moz-range-thumb { cursor: grabbing; }
 
     .input-val {
       font-size: 15px;
@@ -228,7 +219,6 @@
       text-align: right;
     }
 
-    /* ── SECTION LABEL ── */
     .section-label {
       font-size: 11px;
       letter-spacing: 0.09em;
@@ -237,13 +227,8 @@
       margin-bottom: 1rem;
     }
 
-    .divider {
-      height: 1px;
-      background: var(--gray-300);
-      margin: 2rem 0;
-    }
+    .divider { height: 1px; background: var(--gray-300); margin: 2rem 0; }
 
-    /* ── CARDS ── */
     .cards {
       display: grid;
       grid-template-columns: repeat(3, minmax(0, 1fr));
@@ -258,9 +243,7 @@
       padding: 1.1rem 1.2rem;
     }
 
-    .card.featured {
-      border: 2px solid var(--green);
-    }
+    .card.featured { border: 2px solid var(--green); }
 
     .card-eyebrow {
       font-size: 10px;
@@ -287,11 +270,7 @@
     .card-amount.red { color: var(--red); }
     .card-amount.green { color: var(--green-mid); }
 
-    .card-sub {
-      font-size: 11px;
-      color: var(--gray-500);
-      margin-top: 4px;
-    }
+    .card-sub { font-size: 11px; color: var(--gray-500); margin-top: 4px; }
 
     .card-tag {
       display: inline-block;
@@ -304,7 +283,6 @@
       color: var(--green-dark);
     }
 
-    /* ── BARS ── */
     .bar-section { margin-bottom: 2rem; }
 
     .bar-row { margin-bottom: 14px; }
@@ -319,24 +297,14 @@
     .bar-name { font-size: 12px; color: var(--gray-500); }
     .bar-val  { font-size: 12px; font-weight: 600; color: var(--gray-900); }
 
-    .bar-track {
-      height: 6px;
-      background: var(--gray-100);
-      border-radius: 3px;
-      overflow: hidden;
-    }
+    .bar-track { height: 6px; background: var(--gray-100); border-radius: 3px; overflow: hidden; }
 
-    .bar-fill {
-      height: 100%;
-      border-radius: 3px;
-      transition: width 0.4s ease;
-    }
+    .bar-fill { height: 100%; border-radius: 3px; transition: width 0.4s ease; }
 
     .bar-fill.cisco  { background: var(--red); }
     .bar-fill.msp    { background: var(--amber); }
     .bar-fill.meter  { background: var(--green); }
 
-    /* ── SAVINGS BOX ── */
     .savings-box {
       background: var(--green-pale);
       border: 1px solid var(--green-light);
@@ -370,7 +338,6 @@
       margin-top: 3px;
     }
 
-    /* ── BREAKDOWN TABLE ── */
     .breakdown {
       border: 1px solid var(--gray-300);
       border-radius: var(--radius-md);
@@ -398,13 +365,7 @@
     .breakdown-row .bd-val   { color: var(--gray-900); font-weight: 500; }
     .breakdown-row:last-child .bd-val { color: var(--red); }
 
-    /* ── CTA ROW ── */
-    .cta-row {
-      display: flex;
-      gap: 10px;
-      flex-wrap: wrap;
-      margin-bottom: 2rem;
-    }
+    .cta-row { display: flex; gap: 10px; flex-wrap: wrap; margin-bottom: 2rem; }
 
     .btn {
       font-size: 13px;
@@ -424,15 +385,10 @@
 
     .btn:hover { background: var(--gray-100); }
 
-    .btn.primary {
-      background: var(--green);
-      color: var(--white);
-      border-color: var(--green);
-    }
+    .btn.primary { background: var(--green); color: var(--white); border-color: var(--green); }
 
     .btn.primary:hover { background: var(--green-mid); border-color: var(--green-mid); }
 
-    /* ── CONTACT STRIP ── */
     .contact-strip {
       background: var(--gray-900);
       color: var(--gray-300);
@@ -446,12 +402,7 @@
       margin-bottom: 2rem;
     }
 
-    .contact-strip h2 {
-      font-size: 18px;
-      font-weight: 600;
-      color: var(--white);
-      margin-bottom: 4px;
-    }
+    .contact-strip h2 { font-size: 18px; font-weight: 600; color: var(--white); margin-bottom: 4px; }
 
     .contact-strip p { font-size: 13px; color: var(--gray-500); }
 
@@ -477,7 +428,6 @@
 
     .btn-call:hover { background: var(--green-mid); }
 
-    /* ── FOOTER NOTE ── */
     .footer-note {
       font-size: 11px;
       color: var(--gray-500);
@@ -486,14 +436,7 @@
       border-top: 1px solid var(--gray-300);
     }
 
-    /* ── TOOLTIPS ── */
-    .tip {
-      position: relative;
-      display: inline-flex;
-      align-items: center;
-      gap: 4px;
-      vertical-align: middle;
-    }
+    .tip { position: relative; display: inline-flex; align-items: center; gap: 4px; vertical-align: middle; }
 
     .tip-icon {
       display: inline-flex;
@@ -515,11 +458,7 @@
       -webkit-user-select: none;
     }
 
-    .tip-icon:hover,
-    .tip-icon.active {
-      background: var(--green);
-      color: var(--white);
-    }
+    .tip-icon:hover, .tip-icon.active { background: var(--green); color: var(--white); }
 
     .tip-box {
       position: absolute;
@@ -553,22 +492,16 @@
       border-top-color: var(--gray-900);
     }
 
-    /* nudge tip-box left/right when near edge */
     .tip-box.tip-right  { left: 0;   transform: none; }
     .tip-box.tip-right::after  { left: 10px; transform: none; }
     .tip-box.tip-left   { left: auto; right: 0; transform: none; }
     .tip-box.tip-left::after   { left: auto; right: 10px; transform: none; }
 
     .tip-icon.active + .tip-box,
-    .tip:hover .tip-icon + .tip-box {
-      opacity: 1;
-      visibility: visible;
-    }
+    .tip:hover .tip-icon + .tip-box { opacity: 1; visibility: visible; }
 
-    /* Card needs overflow visible for tooltips to escape */
     .card { overflow: visible; }
 
-    /* ── AZURE SECTION ── */
     .azure-section {
       background: #EBF3FB;
       border: 1px solid #C5D9EE;
@@ -578,12 +511,7 @@
       margin-bottom: 2rem;
     }
 
-    .azure-header {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      margin-bottom: 0.75rem;
-    }
+    .azure-header { display: flex; align-items: center; gap: 10px; margin-bottom: 0.75rem; }
 
     .azure-badge {
       display: inline-block;
@@ -598,18 +526,9 @@
       flex-shrink: 0;
     }
 
-    .azure-tagline {
-      font-size: 14px;
-      font-weight: 600;
-      color: #003F7F;
-    }
+    .azure-tagline { font-size: 14px; font-weight: 600; color: #003F7F; }
 
-    .azure-body {
-      font-size: 13px;
-      color: #1a3a5c;
-      line-height: 1.7;
-      margin-bottom: 1.1rem;
-    }
+    .azure-body { font-size: 13px; color: #1a3a5c; line-height: 1.7; margin-bottom: 1.1rem; }
 
     .azure-body strong { color: #003F7F; }
 
@@ -623,12 +542,7 @@
       border-radius: var(--radius-sm);
     }
 
-    /* ── MODE TABS ── */
-    .tab-row {
-      display: flex;
-      gap: 6px;
-      margin-bottom: 1.25rem;
-    }
+    .tab-row { display: flex; gap: 6px; margin-bottom: 1.25rem; }
 
     .tab-btn {
       font-size: 12px;
@@ -645,11 +559,7 @@
 
     .tab-btn:hover { border-color: var(--green); color: var(--green); }
 
-    .tab-btn.active {
-      background: var(--green);
-      border-color: var(--green);
-      color: var(--white);
-    }
+    .tab-btn.active { background: var(--green); border-color: var(--green); color: var(--white); }
 
     .sqft-note {
       font-size: 11px;
@@ -661,7 +571,6 @@
 
     @media (max-width: 580px) { .sqft-note { padding-left: 0; } }
 
-    /* ── RESPONSIVE ── */
     @media (max-width: 580px) {
       .cards { grid-template-columns: 1fr; }
       .input-label { min-width: 110px; }
@@ -669,7 +578,7 @@
       .savings-box { flex-direction: column; }
       .savings-right { text-align: left; }
     }
-    /* ── PROSPECT BANNER ── */
+
     .prospect-banner {
       display: none;
       align-items: center;
@@ -692,12 +601,7 @@
       margin-bottom: 3px;
     }
 
-    .prospect-company {
-      font-size: 17px;
-      font-weight: 600;
-      color: var(--gray-900);
-      letter-spacing: -0.01em;
-    }
+    .prospect-company { font-size: 17px; font-weight: 600; color: var(--gray-900); letter-spacing: -0.01em; }
 
     .prospect-rep {
       margin-left: auto;
@@ -721,14 +625,7 @@
 
     .prospect-dismiss:hover { color: var(--gray-900); }
 
-    /* ── ACTION ROW (Email + PDF) ── */
-    .action-row {
-      display: flex;
-      gap: 10px;
-      flex-wrap: wrap;
-      margin-bottom: 2rem;
-      align-items: center;
-    }
+    .action-row { display: flex; gap: 10px; flex-wrap: wrap; margin-bottom: 2rem; align-items: center; }
 
     .btn {
       font-size: 13px;
@@ -748,17 +645,12 @@
 
     .btn:hover { background: var(--gray-100); }
 
-    .btn.primary {
-      background: var(--green);
-      color: var(--white);
-      border-color: var(--green);
-    }
+    .btn.primary { background: var(--green); color: var(--white); border-color: var(--green); }
 
     .btn.primary:hover { background: var(--green-mid); border-color: var(--green-mid); }
 
     .btn svg { width: 14px; height: 14px; flex-shrink: 0; }
 
-    /* ── LEAD CAPTURE MODAL ── */
     .modal-overlay {
       display: none;
       position: fixed;
@@ -865,7 +757,6 @@
     .modal-success h3 { font-size: 18px; font-weight: 600; color: var(--gray-900); margin-bottom: 0.5rem; }
     .modal-success p { font-size: 13px; color: var(--gray-500); }
 
-    /* ── PRINT STYLES ── */
     @media print {
       nav, .action-row, .contact-strip, .modal-overlay, .prospect-banner { display: none !important; }
       body { background: white; color: #111; font-size: 12px; }
@@ -885,18 +776,12 @@
       .tip-icon { display: none !important; }
     }
 
-    .print-header {
-      display: none;
-      font-size: 11px;
-      color: var(--gray-500);
-      margin-bottom: 1rem;
-    }
+    .print-header { display: none; font-size: 11px; color: var(--gray-500); margin-bottom: 1rem; }
 
   </style>
 </head>
 <body>
 
-  <!-- Lead Capture Modal -->
   <div class="modal-overlay" id="modal-overlay" onclick="closeModalOutside(event)">
     <div class="modal">
       <button class="modal-close" onclick="closeModal()" aria-label="Close">&times;</button>
@@ -906,9 +791,7 @@
         <h2>Email me this report</h2>
         <p class="modal-sub">We'll send a PDF summary of your cost analysis to review with your team — or your CFO.</p>
 
-        <div class="modal-summary" id="modal-summary">
-          <!-- filled by JS -->
-        </div>
+        <div class="modal-summary" id="modal-summary"></div>
 
         <div class="field-row">
           <div class="field">
@@ -1162,7 +1045,7 @@
     </div>
 
     <div class="footer-note">
-      <strong>Methodology:</strong> Cisco/Meraki hardware: $4,200/site on 3-yr refresh cycle. Meraki licensing: $1,140/site/yr. MSP/IT labor: estimated at $620K base for 50 locations, scaled proportionally. Network downtime: 0.8 outages/location/yr × 35 min avg resolution × $240/hr per location. Meter subscription: $480/site/mo all-in. Traditional MSP estimated at ~30% premium over Cisco OpEx. All figures are conservative industry benchmarks for illustrative purposes. Actual costs vary by contract, region, and configuration. <strong>Costs reflect on-premise LAN infrastructure only</strong> (switches, wireless APs, firewall, and managed support). WAN/ISP costs are excluded from this comparison. Note: Meter also simplifies ISP coordination and management — included in the subscription at no extra cost.
+      <strong>Methodology:</strong> Cisco/Meraki hardware: $4,200/site on 3-yr refresh cycle. Meraki licensing: $1,140/site/yr. MSP/IT labor: estimated at $620K base for 50 locations, scaled proportionally. Network downtime: 0.8 outages/location/yr × 35 min avg resolution × $240/hr per location. Meter subscription: $400/site/mo all-in. Traditional MSP estimated at ~30% premium over Cisco OpEx. All figures are conservative industry benchmarks for illustrative purposes. Actual costs vary by contract, region, and configuration. <strong>Costs reflect on-premise LAN infrastructure only</strong> (switches, wireless APs, firewall, and managed support). WAN/ISP costs are excluded from this comparison. Note: Meter also simplifies ISP coordination and management — included in the subscription at no extra cost.
       <br><br>
       &copy; <span id="yr-copy"></span> Ron Andrews &middot; Meter Partner
     </div>
@@ -1209,7 +1092,7 @@
       } else {
         locs       = parseInt(document.getElementById('loc-slider').value);
         document.getElementById('loc-val').textContent = locs.toLocaleString();
-        meterAnnual = 480 * 12 * locs;
+        meterAnnual = 400 * 12 * locs;
       }
 
       document.getElementById('yr-val').textContent = yrs + (yrs === 1 ? ' year' : ' years');
@@ -1260,7 +1143,6 @@
       document.getElementById('bd-cisco-total').textContent = fmt(ciscoGrandTotal);
     }
 
-    // ── MODAL (Email Me This Analysis) ──
     function openModal() {
       var summary = document.getElementById('modal-summary');
       var modeLabel = currentMode === 'locations'
@@ -1329,8 +1211,6 @@
         submitted_at: new Date().toISOString()
       };
 
-      // ── LEAD CAPTURE ENDPOINT ──
-      // Paste your Apps Script web app URL here once deployed (see DEPLOYMENT_GUIDE.md)
       var LEAD_CAPTURE_URL = '';
 
       if (LEAD_CAPTURE_URL) {
@@ -1348,7 +1228,6 @@
       document.getElementById('modal-success').classList.add('show');
     }
 
-    // ── PRINT / PDF ──
     function printReport() {
       document.getElementById('print-header').style.display = 'block';
       window.print();
@@ -1357,7 +1236,6 @@
 
     update();
 
-    // ── URL PARAM PRE-POPULATION ──
     (function() {
       var p       = new URLSearchParams(window.location.search);
       var company = p.get('company');
@@ -1386,7 +1264,7 @@
         var name = decodeURIComponent(company.replace(/\+/g, ' '));
         document.getElementById('prospect-banner').style.display = 'flex';
         document.getElementById('prospect-name').textContent = name;
-        document.title = 'Network Cost Analysis \u2014 ' + name;
+        document.title = 'Network Cost Analysis — ' + name;
         var h1 = document.querySelector('h1');
         if (h1) {
           h1.textContent = '';
@@ -1412,10 +1290,9 @@
         h1.appendChild(em);
         h1.appendChild(document.createTextNode(' costing you?'));
       }
-      document.title = 'Network Cost Calculator \u2014 Meter';
+      document.title = 'Network Cost Calculator — Meter';
     }
 
-    // ── SLIDER AFFORDANCE ──
     const sliders = document.querySelectorAll('input[type="range"]');
     sliders.forEach(function(slider) {
       slider.classList.add('nudge-anim');
@@ -1424,7 +1301,6 @@
       }, { once: true });
     });
 
-    // Fade out drag hints on first interaction
     var hintMap = {
       'loc-slider':  'loc-hint',
       'sqft-slider': 'sqft-hint',
@@ -1443,7 +1319,6 @@
       slider.addEventListener('touchstart', dismissHint, { passive: true });
     });
 
-    // ── TOOLTIPS ──
     document.addEventListener('click', function(e) {
       var icon     = e.target.closest('.tip-icon');
       var allIcons = document.querySelectorAll('.tip-icon');
